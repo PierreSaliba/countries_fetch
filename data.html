@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://www.gstatic.com/firebasejs/7.1.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.1.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.1.0/firebase-firestore.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <nav>
+      <div class="nav__logo">
+        <img src="./image/nature.jpg" alt="" />
+      </div>
+
+      <div class="nav-a">
+        <span id="usr"> </span>
+        <a id="signout-user" class="btn" href="#">Logout</a>
+      </div>
+    </nav>
+
+    <div class="banner">
+      <h1 id="countries">Our Countries</h1>
+    </div>
+  </body>
+</html>
+<script>
+   const firebaseConfig = {
+    apiKey: "AIzaSyBs9ULkRKqCMueITG9jKrtjx0zC4cSIJj0",
+    authDomain: "js-project-c59aa.firebaseapp.com",
+    projectId: "js-project-c59aa",
+    storageBucket: "js-project-c59aa.appspot.com",
+    messagingSenderId: "955069204317",
+    appId: "1:955069204317:web:e3bb0329c714c5a9004ab4",
+  };
+
+  firebase.initializeApp(firebaseConfig);
+
+  // make auth  references
+  const auth = firebase.auth();
+    const signoutUser = document.getElementById("signout-user");
+  signoutUser.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    auth.signOut();
+    window.location.href='./index.html'
+  });
+
+  const user = localStorage.getItem("user");
+
+  let span = document.getElementById("usr");
+  span.innerHTML = "Hello, " + user;
+  
+  var requestOptions = {
+    method: "GET",
+    redirect: "follow",
+  };
+
+  fetch("https://restcountries.com/v3.1/all", requestOptions)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      // Extracting official names from the response data
+      data.forEach((country) => {
+        const officialName = country.name.official;
+        // console.log(officialName);
+        const capitalName = country.capital;
+        // console.log(capitalName);
+
+        const flagImg = country.flags.png;
+        // console.log(flagImg);
+
+        let x = document.createElement("div");
+        x.classList.add("country__div")
+        let y = document.createElement("span");
+        y.classList.add("country__span")
+        let i = document.createElement("i");
+        i.classList.add("country__capital")
+        let img = document.createElement("img")
+        img.classList.add("country__img")
+
+
+
+        i.innerHTML=capitalName;
+
+        y.innerHTML = officialName+' -  ' + capitalName;
+        x.appendChild(y);
+        document.body.append(x);
+
+
+        // x.appendChild(i);
+
+        img.src=flagImg;
+        x.appendChild(img);
+      
+      });
+    })
+    .catch((error) => console.log("error", error));
+</script>

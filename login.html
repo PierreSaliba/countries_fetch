@@ -1,0 +1,100 @@
+<!-- LOGIN/SIGN-UP PAGE FUNCTIONALITY -- FIREBASE AUTH -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/7.1.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.1.0/firebase-auth.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/7.1.0/firebase-firestore.js"></script>
+  </head>
+  <body>
+  
+
+   <div class="form__container">
+    <div class="form-box">
+      <form id="create-user" class="form">
+          <span class="title">Sign up</span>
+          <span class="subtitle">Create a free account with your email.</span>
+          <div class="form-container">
+            <input type="email" name="email" class="input" placeholder="E-mail">
+            <input type="password" name="password" class="input" placeholder="Password">
+          </div>
+          <button type="submit">Sign up</button>
+      </form>
+     
+      </div>
+   </div>
+  </body>
+</html>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBs9ULkRKqCMueITG9jKrtjx0zC4cSIJj0",
+    authDomain: "js-project-c59aa.firebaseapp.com",
+    projectId: "js-project-c59aa",
+    storageBucket: "js-project-c59aa.appspot.com",
+    messagingSenderId: "955069204317",
+    appId: "1:955069204317:web:e3bb0329c714c5a9004ab4",
+  };
+
+  firebase.initializeApp(firebaseConfig);
+
+  // make auth  references
+  const auth = firebase.auth();
+
+  const createUser = document.getElementById("create-user");
+  // const loginUser = document.getElementById("login-user");
+  const signoutUser = document.getElementById("signout-user");
+
+  // create user
+  createUser.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    // get user info
+    const email = createUser["email"].value;
+    const password = createUser["password"].value;
+    // const bio = createUser["bio"].value;
+
+    // create user
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((cred) => {
+        // console.log(cred);
+        // console.log(cred.user.email);
+        localStorage.setItem("user", cred.user.email);
+
+        window.location.href="./data.html"
+      })
+      .then(() => {
+        createUser["email"].value = "";
+        createUser["password"].value = "";
+      });
+  });
+
+  // log in
+  // loginUser.addEventListener("click", (e) => {
+  //   e.preventDefault();
+
+  //   // get user info
+  //   const email = loginUser["email"].value;
+  //   const password = loginUser["password"].value;
+
+  //   // create user
+  //   auth.signInWithEmailAndPassword(email, password).then((cred) => {
+  //     // console.log(cred.user);
+  //     loginUser["email"].value = "";
+  //     loginUser["password"].value = "";
+  //   });
+  // });
+
+  // sign out
+  // signoutUser.addEventListener("click", (e) => {
+  //   e.preventDefault();
+
+  //   auth.signOut();
+  // });
+
+</script>
